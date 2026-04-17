@@ -9,9 +9,11 @@ public abstract class Conta extends Cliente{
 		this.saldo = saldo;
 		this.agencia = agencia;
 	}
+	
 	public double getSaldo() {
 		return saldo;
 	}
+	
 	public void setSaldo(double saldo) {
 		this.saldo = saldo;
 	}

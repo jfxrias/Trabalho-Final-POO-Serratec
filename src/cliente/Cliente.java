@@ -3,8 +3,7 @@ package cliente;
 public class Cliente {
 	private String cpf;
 	private String senha;
-	
-	
+
 	
 	public Cliente(String cpf, String senha) {
 		super();
@@ -17,6 +16,7 @@ public class Cliente {
 	}
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
+		//cod sql
 	}
 	public String getSenha() {
 		return senha;
@@ -24,6 +24,4 @@ public class Cliente {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-	
-	
 }
