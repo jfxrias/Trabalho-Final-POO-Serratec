@@ -109,7 +109,9 @@ public class Menu implements Controlador{
 			int escolha2 = leitor.nextInt();
 			
 			switch(escolha2) {
+
 			case 1:
+				// gerente fazendo operações nas contas dos clientes
 				System.out.println("Você escolheu Movimentações e Informações!");
 				System.out.println("1- Saque, 2- Depósito, 3- Transferência");
 				int subEscolha = leitor.nextInt();
@@ -117,10 +119,49 @@ public class Menu implements Controlador{
 				switch(subEscolha) {
 				case 1:
 					System.out.println("Você escolheu a opção de Saque");
-					System.out.println("Quanto você deseja sacar?");
+					System.out.println("Qual CPF da conta que você deseja sacar?");
+					double cpfCliente = leitor.nextDouble();
+					
+					//consulta sql que vai trazer os dados do cliente e vai para o constructor abaixo
+					
+					ContaCorrente c2 = new ContaCorrente("849.321.321-21","1234", 12,12,12);
+					System.out.println("Qual valor será sacado da conta do cliente?");
 					double valor = leitor.nextDouble();
-					double valorFinal = (valor * -1);
-					c.setSaldo(valorFinal);
+					double valorFinal = valor * -1;
+					
+
+					String senhaCliente;
+					
+					
+					for(int i = 3; i>0;i--) {
+						senhaCliente = leitor.nextLine();
+						
+						//verificação no banco que vai retornar true ou false para a var acertou;
+						boolean acertou = false;//lembrar de apagar isso
+						
+						if(acertou == true) {
+							c2.setSaldo(valorFinal);
+							break;
+						}
+						
+						else {
+							if(i == 3) {
+								System.out.println("Peça para o cliente digitar sua senha: ");
+							} else{
+								System.out.println("Senha incorreta, tentativa(s) restante(s)" +i);
+							}
+						}
+						
+					}
+					
+					
+					//esse codigo está errado, vc deve acertar;
+					
+					
+					
+
+					
+					
 				
 					break;
 					
@@ -128,7 +169,6 @@ public class Menu implements Controlador{
 					System.out.println("Você escolheu a opção de Depósito");
 					System.out.println("Quanto você deseja depositar?");
 					double valor2 = leitor.nextDouble();
-					c.setSaldo(c.getSaldo() - valor2);
 					
 					break;
 					
