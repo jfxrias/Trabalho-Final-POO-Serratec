@@ -1,31 +1,40 @@
 package cliente;
 
-public class ContaCorrente extends Conta{
-	
-	private int tipo = 0; // 0 para CC, 1 para CP
-	
-	public ContaCorrente(String cpf, String senha, double saldo, int agencia, int tipo) {
-		super(cpf, senha, saldo, agencia);
-		this.tipo = tipo;
-	}
+public class ContaCorrente extends Conta {
 
-	@Override
-	public double getSaldo() {
-		// TODO Auto-generated method stub
-		return super.getSaldo();
-	}
+    private double taxaTotal;
 
-	@Override
-	public void setSaldo(double saldo) {
-		// TODO Auto-generated method stub
-		super.setSaldo(saldo);
-	}
+    public ContaCorrente(String cpfTitular, double saldo, int agencia) {
+        super(cpfTitular, saldo, agencia);
+        this.taxaTotal = 0;
+    }
 
-	public int getTipo() {
-		return tipo;
-	}
+    public double getTaxaTotal() {
+        return taxaTotal;
+    }
 
-	public void setTipo(int tipo) {
-		this.tipo = tipo;
-	}
+    public void setTaxaTotal(double taxaTotal) {
+        this.taxaTotal = taxaTotal;
+    }
+
+    @Override
+    public void sacar(double valor) {
+        super.sacar(valor);
+        setSaldo(getSaldo() - 0.10);
+        setTaxaTotal(getTaxaTotal() + 0.10);
+    }
+
+    @Override
+    public void depositar(double valor) {
+        super.depositar(valor);
+        setSaldo(getSaldo() - 0.10);
+        setTaxaTotal(getTaxaTotal() + 0.10);
+    }
+
+    @Override
+    public void transferir(Conta destino, double valor) {
+        super.transferir(destino, valor);
+        setSaldo(getSaldo() - 0.20);
+        setTaxaTotal(getTaxaTotal() + 0.20);
+    }
 }

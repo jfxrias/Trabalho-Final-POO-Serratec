@@ -6,7 +6,6 @@ public class Cliente {
 
 	
 	public Cliente(String cpf, String senha) {
-		super();
 		this.cpf = cpf;
 		this.senha = senha;
 	}

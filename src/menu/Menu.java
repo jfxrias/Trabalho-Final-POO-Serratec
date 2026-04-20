@@ -33,8 +33,7 @@ public class Menu implements Controlador{
 				//vai rodar o looping while até o desgraçado acertar a senha
 			}
 		}
-		
-		
+			
 		
 		//implementar sql, que retorna o tipo de acesso 1-cliente, 2-gerente, 3- ;
 		
@@ -46,7 +45,7 @@ public class Menu implements Controlador{
 		case 1:
 			
 				//cliente
-				ContaCorrente c = new ContaCorrente("849.321.321-21","1234", 12,12,12);
+				ContaCorrente c = new ContaCorrente("849.321.321-21",1234, 1);
 				System.out.println("1- Movimentações na Conta");
 				System.out.println("2- Relatórios");
 
@@ -63,8 +62,9 @@ public class Menu implements Controlador{
 						System.out.println("Você escolheu a opção de Saque");
 						System.out.println("Quanto você deseja sacar?");
 						double valor = leitor.nextDouble();
-						double valorFinal = (valor * -1);
-						c.setSaldo(valorFinal);
+						if(c.getSaldo() >= valor) {
+							c.setSaldo(c.getSaldo() - valor);
+						}
 					
 						break;
 						
@@ -124,7 +124,7 @@ public class Menu implements Controlador{
 					
 					//consulta sql que vai trazer os dados do cliente e vai para o constructor abaixo
 					
-					ContaCorrente c2 = new ContaCorrente("849.321.321-21","1234", 12,12,12);
+					ContaCorrente c2 = new ContaCorrente("84932132121",1234, 1);
 					System.out.println("Qual valor será sacado da conta do cliente?");
 					double valor = leitor.nextDouble();
 					double valorFinal = valor * -1;
@@ -160,9 +160,7 @@ public class Menu implements Controlador{
 					
 					
 
-					
-					
-				
+		
 					break;
 					
 				case 2:
