@@ -6,211 +6,254 @@ public class Menu implements Controlador{
 
 	@Override
 	public void abrirMenu() {
+	
+	String cpfDigitado = null;
+	String senhaDigitada = null;
+	Scanner leitor = new Scanner(System.in);
+	
+	int continuaPedindoSenha = 1;
+	
+	while(continuaPedindoSenha == 1) {
 		
-		String cpf;
-		String senha;
-		Scanner leitor = new Scanner(System.in);
+		System.out.println("Olá, bem-vindo ao Banco");
+		cpfDigitado = leitor.nextLine();
+		System.out.println("Agora digite sua senha:");
+		senhaDigitada = leitor.nextLine();
 		
+		String senhaBD = cpfDigitado; //implementar que venha do bd essas duas variaves
+		String cpfBD = cpfDigitado;
 		
-		int continua = 1; //boolean?
-		
-		while(continua == 1) {
-			System.out.println("Bem-vindo ao Banco!");
-			System.out.println("Digite seu cpf: ");
-			cpf = leitor.nextLine();
-			System.out.println("Agora informe sua senha: ");
-			senha = leitor.nextLine();
-			
-			// implementar se a pessoa quer conta corrente ou conta poupanca
-			
-			//implementar sql, que vai retornar se os login deu certo, vai alterar o valor da var sucesso vai ser 1;
-			
-			boolean sucesso = true;
-			
-			if(sucesso == true) {
-				continua = 0;
-			} else {
-				//vai rodar o looping while até o desgraçado acertar a senha
-			}
+		if(senhaDigitada.equals(senhaBD) && cpfDigitado.equals(cpfBD)) {
+			System.out.println("Login efetuado!");		
+			continuaPedindoSenha = 0;
 		}
+		
+		else {
+			System.out.println("Senha incorreta, tente novamente");
+		}
+		
+	}
+	
+	//CASOS 1,2 e 3
+	
+	//querry sql que retorna se o cara é cliente, funcionario ou diretor
+	int tipoDeUsuario = 1;
+	
+	
+	switch(tipoDeUsuario) {
+	case 1:
+		
+		//AGORA PERGUNTA SE QUER ACESSAR A CONTA CORRENTE OU CONTA POUPANÇA;
+			int continuaPerguntandoTipoConta = 1;
+			int perguntaTipoConta = 1;
+			while(continuaPerguntandoTipoConta == 1) {
+				System.out.println("Você quer acessar: 1)Conta corrente | 2)Conta Poupança");
+				perguntaTipoConta = leitor.nextInt();
 			
-		
-		//implementar sql, que retorna o tipo de acesso 1-cliente, 2-gerente, 3- ;
-		
-		int tipoAcesso = 1; // lembrar de alterar!
-		
-		switch(tipoAcesso) {
-		
-
-		case 1:
-			
-				//cliente
-				ContaCorrente c = new ContaCorrente("849.321.321-21",1234, 1);
-				System.out.println("1- Movimentações na Conta");
-				System.out.println("2- Relatórios");
-
-				int escolha = leitor.nextInt();
+				if(perguntaTipoConta == 1 || perguntaTipoConta == 2) {
+					continuaPerguntandoTipoConta = 0;
+				} else {
 				
-				switch(escolha) {
-				case 1:
-					System.out.println("Você selecionou Movimentações!");
-					System.out.println("1- Saque, 2- Depósito, 3- Transferência");
-					int subEscolha = leitor.nextInt();
-					
-					switch(subEscolha) {
-					case 1:
-						System.out.println("Você escolheu a opção de Saque");
-						System.out.println("Quanto você deseja sacar?");
-						double valor = leitor.nextDouble();
-						if(c.getSaldo() >= valor) {
-							c.setSaldo(c.getSaldo() - valor);
-						}
-					
-						break;
-						
-					case 2:
-						System.out.println("Você escolheu a opção de Depósito");
-						System.out.println("Quanto você deseja depositar?");
-						double valor2 = leitor.nextDouble();
-						c.setSaldo(c.getSaldo() - valor2);
-						
-						break;
-						
-					case 3:
-						System.out.println("Você escolheu a opção de Transferencia");
-						System.out.println("Quanto você deseja transferir?");
-						double valor3 = leitor.nextDouble();
-						// ai eh sofrido
-						break;
-						
-						
-					default: System.out.println("Escolha inválida!");
-					}
-					break;
-					
-				case 2:
-
-					
-					System.out.println("Você selecionou Relatórios!");
-					System.out.println("1- Saldo, 2- Tributação, 3- Rendimento, 4-Desafio(?)");
-					
-					break;
-					default: 
-						System.out.println("Opção inválida!");
-					}
-				 
-			break;
+				}
+			}
+			int continuaMovOuRel = 1;
+			int movimentacoesOuRelatorios = 1;
 			
-		case 2:
-			
-			//Funcionario no cargo de gerente;
-			System.out.println("Olá gerente nomeVindoDoSql!");
-			System.out.println("1- Movimentações e Informações, 2- Relatórios");
-			int escolha2 = leitor.nextInt();
-			
-			switch(escolha2) {
-
-			case 1:
-				// gerente fazendo operações nas contas dos clientes
-				System.out.println("Você escolheu Movimentações e Informações!");
-				System.out.println("1- Saque, 2- Depósito, 3- Transferência");
-				int subEscolha = leitor.nextInt();
+			while(continuaMovOuRel == 1) {
+				System.out.println("=======BEM VINDO USUARIO=======");
+				System.out.println("1) Movimentações | 2) Relatórios");
+				movimentacoesOuRelatorios = leitor.nextInt();
 				
-				switch(subEscolha) {
-				case 1:
-					System.out.println("Você escolheu a opção de Saque");
-					System.out.println("Qual CPF da conta que você deseja sacar?");
-					double cpfCliente = leitor.nextDouble();
+				if(movimentacoesOuRelatorios == 1 || movimentacoesOuRelatorios ==2) {
+					continuaMovOuRel = 0;
+				} else {
 					
-					//consulta sql que vai trazer os dados do cliente e vai para o constructor abaixo
-					
-					ContaCorrente c2 = new ContaCorrente("84932132121",1234, 1);
-					System.out.println("Qual valor será sacado da conta do cliente?");
-					double valor = leitor.nextDouble();
-					double valorFinal = valor * -1;
-					
-
-					String senhaCliente;
-					
-					
-					for(int i = 3; i>0;i--) {
-						senhaCliente = leitor.nextLine();
+				}
+			}
+			
+			if(movimentacoesOuRelatorios == 1) {
+				int perguntaSaqDepTransf = 1;
+				int SaqDepTransf = 1;
+				
+				while(perguntaSaqDepTransf == 1) {
+				System.out.println("=======MOVIMENTAÇÕES NA CONTA=======");
+				System.out.println("1) Saque | 2) Depósito | 3) Transferência");
+				SaqDepTransf = leitor.nextInt();
+				
+				if(SaqDepTransf == 1 || SaqDepTransf == 2 || SaqDepTransf == 3) {
+					perguntaSaqDepTransf = 0;
+				}
+				
+				if(SaqDepTransf == 1) {
+					int continua = 1;
+					while(continua == 1) {
+						System.out.println("=====SAQUE=====");
+						System.out.println("Digite o valor que você quer sacar:");
+						double valorSaque = leitor.nextDouble();
 						
-						//verificação no banco que vai retornar true ou false para a var acertou;
-						boolean acertou = false;//lembrar de apagar isso
-						
-						if(acertou == true) {
-							c2.setSaldo(valorFinal);
-							break;
-						}
-						
-						else {
-							if(i == 3) {
-								System.out.println("Peça para o cliente digitar sua senha: ");
-							} else{
-								System.out.println("Senha incorreta, tentativa(s) restante(s)" +i);
+						if (perguntaTipoConta == 1) {
+							//os dados vão vir do sql lá em cima qnd verifica se a senha e cpf são iguais
+							ContaCorrente c = new ContaCorrente(cpfDigitado, 0,0);
+							if(c.getSaldo() >= valorSaque) {
+								c.setSaldo(c.getSaldo() - valorSaque);
+								continua = 0;
+							}
+						} else {
+							ContaPoupanca c = new ContaPoupanca(cpfDigitado, 0,0);
+							if(c.getSaldo() >= valorSaque) {
+							c.setSaldo(c.getSaldo() - valorSaque);
+							continua = 0;
 							}
 						}
+					}
+				}
+				
+				if(SaqDepTransf == 2) {
+					int continua = 1;
+					while(continua == 1) {
+						System.out.println("=====SAQUE=====");
+						System.out.println("Digite o valor que você quer depositar:");
+						double valorDeposito = leitor.nextDouble();
 						
+						if(perguntaTipoConta == 1) {
+							ContaCorrente c = new ContaCorrente(cpfDigitado, 0 ,0);
+							c.setSaldo(c.getSaldo() + valorDeposito);
+							continua = 0;
+						} else {
+							ContaPoupanca c = new ContaPoupanca(cpfDigitado, 0,0);
+							c.setSaldo(c.getSaldo() + valorDeposito);
+							continua = 0;
+						}
+					}
+				}
+				
+				if(SaqDepTransf == 3) {
+					int continua = 1;
+					
+					while(continua == 1) {
+						System.out.println("=====TRANSFERÊNCIA=====");
+						System.out.println("Digite o CPF da conta que você deseja transferir:");
+						String cpfRecebe = leitor.nextLine();
+						System.out.println("Qual valor você quer depositar?");
+						double valorTransferencia = leitor.nextDouble();
+						
+						//SE FOR CONTA CORRENTE
+						if(perguntaTipoConta == 1) {
+							ContaCorrente manda = new ContaCorrente(cpfDigitado, 0 ,0); //  retornar do bd
+							ContaCorrente recebe = new ContaCorrente(cpfRecebe, 0 ,0); //  retornar do bd
+							
+							if(manda.getSaldo() >= valorTransferencia) {
+								manda.setSaldo(manda.getSaldo() - valorTransferencia - 0.20);
+								recebe.setSaldo(recebe.getSaldo() + valorTransferencia);
+							}else {
+								System.out.println("Saldo insuficiente para essa transferência!");
+							}
+						} 
+						//SE FOR CONTA POUPANÇA
+						else {
+							ContaPoupanca manda = new ContaPoupanca(cpfDigitado, 0 ,0); //  retornar do bd
+							ContaPoupanca recebe = new ContaPoupanca(cpfRecebe, 0 ,0); //  retornar do bd
+							if(manda.getSaldo() >= valorTransferencia) {
+								manda.setSaldo(manda.getSaldo() - valorTransferencia - 0.20);
+								recebe.setSaldo(recebe.getSaldo() + valorTransferencia);
+								continua = 0;
+							} else {
+								System.out.println("Saldo insuficiente para essa transferencia!");
+						}
+					}
+						
+						
+					}
+				}
+			}
+		}
+			
+		if(movimentacoesOuRelatorios == 2) {
+			System.out.println("=======RELATÓRIOS=======");
+			System.out.println("1) Saldo | 2) Tributações | 3) Rendimento | 4) Seguro de vida");
+			int escolhaRelatorio = leitor.nextInt();
+			
+			if(escolhaRelatorio == 1) {
+				if(perguntaTipoConta == 1) {
+					ContaCorrente c = new ContaCorrente(cpfDigitado, 0 ,0); //  retornar do bd
+					c.getSaldo(); // substituir por query sql
+				} else {
+					ContaPoupanca c = new ContaPoupanca(cpfDigitado, 0 ,0); //  retornar do bd
+					c.getSaldo(); // substituir por query sql
+				}
+			}
+			
+			if(escolhaRelatorio == 2) {
+				double valorTotalOperacoes = 171; //retornar query do bd
+				System.out.println("Total gasto nas operações até o momento: " +valorTotalOperacoes);
+				System.out.println("Valor de cada operação bancária: ");
+				System.out.println("Saque: R$0.10 (dez centavos);");
+				System.out.println("Depósito: R$0.10 (dez centavos);");
+				System.out.println("Transferência: R$0.20 (vinte centavos) do remetente;");
+			}
+			
+			if(escolhaRelatorio == 3) {
+				int continua = 1;
+				
+				while(continua == 1) {
+					System.out.println("Digite o valor que deseja simular o rendimento: ");				
+					
+				}
+			}
+			
+			if(escolhaRelatorio == 4) {
+				int continua = 1;
+				
+				while(continua == 1) {
+					System.out.println("=======SEGURO DE VIDA=======");
+					System.out.println("De quanto você quer contrayar o seguro de vida?");
+					double valorSeguro = leitor.nextDouble();
+					double valorDebitado = valorSeguro * 0.2;
+					boolean contratado = false;
+					
+					if(perguntaTipoConta == 1) {
+						ContaCorrente c = new ContaCorrente(cpfDigitado, 0,0); 
+						
+						if(c.getSaldo() >= valorSeguro) {
+							c.setSaldo(c.getSaldo() - valorDebitado);
+							continua = 0;
+							contratado = true;
+						} else {
+							System.out.println("Saldo Insuficiente para contratar este valor de seguro");
+						}
+					} else {
+						ContaPoupanca c = new ContaPoupanca(cpfDigitado, 0,0); 
+						
+						if(c.getSaldo() >= valorSeguro) {
+							c.setSaldo(c.getSaldo() - valorDebitado);
+							continua = 0;
+							contratado = true;
+						} else {
+							System.out.println("Saldo Insuficiente para contratar este valor de seguro");
+						}
+					}
+					
+					if(contratado == true) {
+						System.out.println("Seguro de vida de R$"+valorSeguro+" contratado");
+						System.out.println("R$"+valorDebitado+" foi debitado da conta!");
 					}
 					
 					
-					//esse codigo está errado, vc deve acertar;
 					
-					
-					
-
-		
-					break;
-					
-				case 2:
-					System.out.println("Você escolheu a opção de Depósito");
-					System.out.println("Quanto você deseja depositar?");
-					double valor2 = leitor.nextDouble();
-					
-					break;
-					
-				case 3:
-					System.out.println("Você escolheu a opção de Transferencia");
-					System.out.println("Quanto você deseja transferir?");
-					double valor3 = leitor.nextDouble();
-					// ai eh sofrido
-					break;
-					
-					
-				default: System.out.println("Escolha inválida!");
+					//Incluir no relatório de tributação o valor referente ao seguro de vida, caso este cliente possua
+					//estas informações.
 				}
-				break;
-				
-			case 2:
-				System.out.println("Você escolheu Relatórios!");
-				System.out.println("1- Saldo, 2- Tributação, 3- Conta Poupança, 4- Números de contas da Agência");
-				int subEscolha2 = leitor.nextInt();
-				
-				switch(subEscolha2) {
-				case 1:
-					break;
-				case 2:
-					break;
-				case 3:
-					break;
-				case 4:
-					break;
-				}
-						
-				break;
-				
-				default: System.out.println("Escolha não existe");
 			}
-			
-			break;
-		case 3:
-			//Funcionario no cargo de diretor;
-			break;
-		default:
-			System.out.println("Tipo de conta invalido;");
 		}
+			
+			
+			
+			//FIM DO SE FOR CLIENTE
+		break;
 		
-		leitor.close();
+	}
+	
+
+	
 	}
 }
