@@ -3,21 +3,21 @@ create type cargo_func as enum ('gerente', 'diretor','presidente');
 create type conta_tipo as enum ('corrente','poupanca');
 create type tipo_operacao as enum ('saque', 'deposito','transferencia');
 
-create table clientes (
+create table if not exists clientes (
     cpf varchar(11) primary key,
     nome varchar(100) not null,
     senha varchar(20) not null
 );
 	
-create table funcionarios (
+create table if not exists funcionarios (
 	cpf varchar(11) primary key, 
 	nome varchar(100) not null, 
 	senha varchar(20) not null,
-	cargo cargo_func not null, -- Gerente, Diretor, Presidente.
+	cargo cargo_func not null, 
 	agencia int
 ); 
 
-create table contas (
+create table if not exists contas (
 	id serial primary key,
 	cpf_titular varchar(11) not null,
 	saldo numeric(10,2) not null default 0,
@@ -28,7 +28,7 @@ create table contas (
 	foreign key (cpf_titular) references clientes(cpf)
 );
 
-create table operacoes (
+create table if not exists operacoes (
 	id serial primary key,
 	tipo tipo_operacao not null,
 	valor numeric(10,2) not null, 
@@ -43,7 +43,7 @@ create table operacoes (
 	foreign key (cpf_destino) references clientes(cpf)
 );
 
-create table seguro (
+create table if not exists seguro (
 	id serial primary key,
 	cpf_cliente varchar(11) not null, 
 	valor numeric(10,2) not null,
@@ -88,12 +88,13 @@ insert into seguro (cpf_cliente, valor) values
 ('22222222222', 5000.00)
 ;
 
-select * from clientes; 
-select * from funcionarios;  
-select * from contas; 
-select * from operacoes; 
-select * from seguro;
-
+-- Detalhes completos:
+select '--- Clientes ---'  as info;  
+select * from clientes;
+select '--- Contas ---'  as info;  
+select * from contas;
+select '--- Funcionários ---'  as info;
+select * from funcionarios;
 
 
 
