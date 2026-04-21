@@ -21,7 +21,9 @@ public abstract class Conta {
     }
 
     public double getSaldo() {
+    	//querry sql reto
         return saldo;
+        
     }
 
     public void setSaldo(double saldo) {

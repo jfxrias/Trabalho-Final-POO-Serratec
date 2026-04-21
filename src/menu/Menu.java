@@ -1,6 +1,7 @@
 package menu;
 import java.util.Scanner;
 import cliente.*;
+import funcionario.*;
 
 public class Menu implements Controlador{
 
@@ -16,6 +17,7 @@ public class Menu implements Controlador{
 	while(continuaPedindoSenha == 1) {
 		
 		System.out.println("Olá, bem-vindo ao Banco");
+		System.out.println("Digite seu CPF:");
 		cpfDigitado = leitor.nextLine();
 		System.out.println("Agora digite sua senha:");
 		senhaDigitada = leitor.nextLine();
@@ -42,7 +44,7 @@ public class Menu implements Controlador{
 	
 	switch(tipoDeUsuario) {
 	case 1:
-		
+		//INICIO SE FOR CLIENTE
 		//AGORA PERGUNTA SE QUER ACESSAR A CONTA CORRENTE OU CONTA POUPANÇA;
 			int continuaPerguntandoTipoConta = 1;
 			int perguntaTipoConta = 1;
@@ -186,20 +188,49 @@ public class Menu implements Controlador{
 			if(escolhaRelatorio == 2) {
 				double valorTotalOperacoes = 171; //retornar query do bd
 				System.out.println("Total gasto nas operações até o momento: " +valorTotalOperacoes);
-				System.out.println("Valor de cada operação bancária: ");
-				System.out.println("Saque: R$0.10 (dez centavos);");
-				System.out.println("Depósito: R$0.10 (dez centavos);");
-				System.out.println("Transferência: R$0.20 (vinte centavos) do remetente;");
+				
+				// Simulando que você buscou no BD se o cliente tem seguro (Tabela 'seguro')
+			    double valorDoSeguroNoBD = 10000.00; // Isso virá da sua query SQL
+			    
+			    if(valorDoSeguroNoBD > 0) {
+			        double tributoSeguro = valorDoSeguroNoBD * 0.02; // Cálculo dos 2%
+			        System.out.printf("Tributo sobre Seguro de Vida: R$ %.2f\n", tributoSeguro);
+			        System.out.printf("TOTAL GERAL DE TRIBUTOS: R$ %.2f\n", (valorTotalOperacoes + tributoSeguro));
+			    }
+			    
+
+			    System.out.println("\nValor de cada operação bancária: ");
+			    System.out.println("Saque: R$ 0.10 | Depósito: R$ 0.10 | Transferência: R$ 0.20");
 			}
+				
 			
 			if(escolhaRelatorio == 3) {
 				int continua = 1;
 				
 				while(continua == 1) {
-					System.out.println("Digite o valor que deseja simular o rendimento: ");				
+					if(perguntaTipoConta == 2) { 
+			            System.out.println("=== SIMULAÇÃO DE RENDIMENTO POUPANÇA ===");
+			            System.out.print("Digite o valor que deseja simular: ");
+			            double valorSimular = leitor.nextDouble();
+			            
+			            System.out.print("Digite a quantidade de dias para o prazo: ");
+			            int dias = leitor.nextInt();
+
+			            //Calculamos o rendimento (Taxa de 0.5% ao mês)
+			            double rendimento = valorSimular * (Math.pow(1 + (0.005 / 30), dias) - 1);
+			            
+			            System.out.printf("Rendimento no prazo de %d dias: R$ %.2f\n", dias, rendimento);
+			            System.out.printf("Valor total (Principal + Rendimento): R$ %.2f\n", (valorSimular + rendimento));
+			            
+			            continua = 0; //Para o loop parar depois de mostrar o resultado
+			        } else {
+			            System.out.println("Erro: Esta simulação é permitida apenas para Conta Poupança.");
+			            continua = 0; // Para sair do loop mesmo em caso de erro
+			        }			
 					
 				}
 			}
+
 			
 			if(escolhaRelatorio == 4) {
 				int continua = 1;
@@ -250,10 +281,14 @@ public class Menu implements Controlador{
 			
 			//FIM DO SE FOR CLIENTE
 		break;
+	case 2:
 		
-	}
-	
-
+		//INICIO SE FOR GERENTE
+		
+		
+		break;
+		
+		}
 	
 	}
 }
