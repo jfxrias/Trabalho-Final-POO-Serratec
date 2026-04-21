@@ -1,7 +1,8 @@
 package menu;
-import java.util.Scanner;
+import java.util.Scanner; 
 import cliente.*;
 import funcionario.*;
+import pacoteConexao.Conexao;
 
 public class Menu implements Controlador{
 
@@ -22,25 +23,33 @@ public class Menu implements Controlador{
 		System.out.println("Agora digite sua senha:");
 		senhaDigitada = leitor.nextLine();
 		
-		String senhaBD = cpfDigitado; //implementar que venha do bd essas duas variaves
-		String cpfBD = cpfDigitado;
 		
-		if(senhaDigitada.equals(senhaBD) && cpfDigitado.equals(cpfBD)) {
-			System.out.println("Login efetuado!");		
-			continuaPedindoSenha = 0;
-		}
+		try (java.sql.Connection conn = pacoteConexao.Conexao.conectar()) {
+			if(conn == null){
+			System.out.println("Erro de conexão com o banco!");
+			return;
+}
+		    String sql = "SELECT * FROM clientes WHERE cpf = ? AND senha = ?";
+
+		    java.sql.PreparedStatement stmt = conn.prepareStatement(sql);
+		    stmt.setString(1, cpfDigitado);
+		    stmt.setString(2, senhaDigitada);
+
+		    java.sql.ResultSet rs = stmt.executeQuery();
+
+		    if(rs.next()) {
+		        System.out.println("Login efetuado!");
+		        continuaPedindoSenha = 0;
+		    } else {
+		        System.out.println("Senha incorreta, tente novamente");
+		    }
 		
-		else {
-			System.out.println("Senha incorreta, tente novamente");
-		}
-		
+		} catch (Exception e) {
+		    e.printStackTrace();
 	}
-	
-	//CASOS 1,2 e 3
-	
-	//querry sql que retorna se o cara é cliente, funcionario ou diretor
+}
+
 	int tipoDeUsuario = 1;
-	
 	
 	switch(tipoDeUsuario) {
 	case 1:
@@ -93,22 +102,24 @@ public class Menu implements Controlador{
 						System.out.println("Digite o valor que você quer sacar:");
 						double valorSaque = leitor.nextDouble();
 						
-						if (perguntaTipoConta == 1) {
-							//os dados vão vir do sql lá em cima qnd verifica se a senha e cpf são iguais
-							ContaCorrente c = new ContaCorrente(cpfDigitado, 0,0);
-							if(c.getSaldo() >= valorSaque) {
-								c.setSaldo(c.getSaldo() - valorSaque);
-								continua = 0;
-							}
-						} else {
-							ContaPoupanca c = new ContaPoupanca(cpfDigitado, 0,0);
-							if(c.getSaldo() >= valorSaque) {
-							c.setSaldo(c.getSaldo() - valorSaque);
-							continua = 0;
-							}
-						}
-					}
-				}
+						try (java.sql.Connection conn = Conexao.conectar()) {
+
+						    String sql = "UPDATE contas SET saldo = saldo - ? WHERE cpf_titular = ?";
+
+						    java.sql.PreparedStatement stmt = conn.prepareStatement(sql);
+						    stmt.setDouble(1, valorSaque);
+						    stmt.setString(2, cpfDigitado);
+
+						    stmt.executeUpdate();
+
+						    System.out.println("Saque realizado!");
+						    continua = 0;
+
+			} catch (Exception e) {
+		      e.printStackTrace();
+		}				
+	}
+}
 				
 				if(SaqDepTransf == 2) {
 					int continua = 1;
@@ -117,15 +128,23 @@ public class Menu implements Controlador{
 						System.out.println("Digite o valor que você quer depositar:");
 						double valorDeposito = leitor.nextDouble();
 						
-						if(perguntaTipoConta == 1) {
-							ContaCorrente c = new ContaCorrente(cpfDigitado, 0 ,0);
-							c.setSaldo(c.getSaldo() + valorDeposito);
-							continua = 0;
-						} else {
-							ContaPoupanca c = new ContaPoupanca(cpfDigitado, 0,0);
-							c.setSaldo(c.getSaldo() + valorDeposito);
-							continua = 0;
+						try (java.sql.Connection conn = Conexao.conectar()) {
+
+						    String sql = "UPDATE contas SET saldo = saldo + ? WHERE cpf_titular = ?";
+
+						    java.sql.PreparedStatement stmt = conn.prepareStatement(sql);
+						    stmt.setDouble(1, valorDeposito);
+						    stmt.setString(2, cpfDigitado);
+
+						    stmt.executeUpdate();
+
+						    System.out.println("Depósito realizado!");
+						    continua = 0;
+
+						} catch (Exception e) {
+						    e.printStackTrace();
 						}
+						
 					}
 				}
 				
@@ -140,36 +159,37 @@ public class Menu implements Controlador{
 						System.out.println("Qual valor você quer depositar?");
 						double valorTransferencia = leitor.nextDouble();
 						
-						//SE FOR CONTA CORRENTE
-						if(perguntaTipoConta == 1) {
-							ContaCorrente manda = new ContaCorrente(cpfDigitado, 0 ,0); //  retornar do bd
-							ContaCorrente recebe = new ContaCorrente(cpfRecebe, 0 ,0); //  retornar do bd
-							
-							if(manda.getSaldo() >= valorTransferencia) {
-								manda.setSaldo(manda.getSaldo() - valorTransferencia - 0.20);
-								recebe.setSaldo(recebe.getSaldo() + valorTransferencia);
-							}else {
-								System.out.println("Saldo insuficiente para essa transferência!");
-							}
-						} 
-						//SE FOR CONTA POUPANÇA
-						else {
-							ContaPoupanca manda = new ContaPoupanca(cpfDigitado, 0 ,0); //  retornar do bd
-							ContaPoupanca recebe = new ContaPoupanca(cpfRecebe, 0 ,0); //  retornar do bd
-							if(manda.getSaldo() >= valorTransferencia) {
-								manda.setSaldo(manda.getSaldo() - valorTransferencia - 0.20);
-								recebe.setSaldo(recebe.getSaldo() + valorTransferencia);
-								continua = 0;
-							} else {
-								System.out.println("Saldo insuficiente para essa transferencia!");
-						}
-					}
-						
-						
-					}
-				}
+						try (java.sql.Connection conn = Conexao.conectar()) {
+
+						    conn.setAutoCommit(false);
+
+						    String sql1 = "UPDATE contas SET saldo = saldo - ? WHERE cpf_titular = ?";
+						    String sql2 = "UPDATE contas SET saldo = saldo + ? WHERE cpf_titular = ?";
+
+						    java.sql.PreparedStatement stmt1 = conn.prepareStatement(sql1);
+						    java.sql.PreparedStatement stmt2 = conn.prepareStatement(sql2);
+
+						    stmt1.setDouble(1, valorTransferencia);
+						    stmt1.setString(2, cpfDigitado);
+
+						    stmt2.setDouble(1, valorTransferencia);
+						    stmt2.setString(2, cpfRecebe);
+
+						    stmt1.executeUpdate();
+						    stmt2.executeUpdate();
+
+						    conn.commit();
+
+						    System.out.println("Transferência realizada!");
+						    continua = 0;
+
+				    } catch (Exception e) {
+				    	e.printStackTrace();
+				}			
 			}
 		}
+	}
+}
 			
 		if(movimentacoesOuRelatorios == 2) {
 			System.out.println("=======RELATÓRIOS=======");
@@ -177,14 +197,24 @@ public class Menu implements Controlador{
 			int escolhaRelatorio = leitor.nextInt();
 			
 			if(escolhaRelatorio == 1) {
-				if(perguntaTipoConta == 1) {
-					ContaCorrente c = new ContaCorrente(cpfDigitado, 0 ,0); //  retornar do bd
-					c.getSaldo(); // substituir por query sql
-				} else {
-					ContaPoupanca c = new ContaPoupanca(cpfDigitado, 0 ,0); //  retornar do bd
-					c.getSaldo(); // substituir por query sql
+				try (java.sql.Connection conn = Conexao.conectar()) {
+
+					String sql = "SELECT saldo FROM contas WHERE cpf_titular = ?";
+
+					java.sql.PreparedStatement stmt = conn.prepareStatement(sql);
+					stmt.setString(1, cpfDigitado);
+
+					java.sql.ResultSet rs = stmt.executeQuery();
+
+					if (rs.next()) {
+						double saldo = rs.getDouble("saldo");
+						System.out.println("Saldo: R$ " + saldo);
+					}
+
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			}
+				}
 			
 			if(escolhaRelatorio == 2) {
 				double valorTotalOperacoes = 171; //retornar query do bd
@@ -278,13 +308,12 @@ public class Menu implements Controlador{
 
 			
 			
-		}
-			
-			
-			
+		}	
 			//FIM DO SE FOR CLIENTE
 		break;
-	case 2,3,4:
+	    case 2:
+	    case 3:
+	    case 4:
 		// 2 gerente, 3 diretor, 4 presidente
 		
 		//INICIO SE FOR GERENTE
@@ -431,13 +460,23 @@ public class Menu implements Controlador{
 					int escolhaRelatorio = leitor.nextInt();
 					
 					if(escolhaRelatorio == 1) {
-						if(perguntaTipoConta2 == 1) {
-							ContaCorrente c = new ContaCorrente(cpfDigitado, 0 ,0); //  retornar do bd
-							c.getSaldo(); // substituir por query sql
-						} else {
-							ContaPoupanca c = new ContaPoupanca(cpfDigitado, 0 ,0); //  retornar do bd
-							c.getSaldo(); // substituir por query sql
-						}
+					    try (java.sql.Connection conn = Conexao.conectar()) {
+
+					        String sql = "SELECT saldo FROM contas WHERE cpf_titular = ?";
+
+					        java.sql.PreparedStatement stmt = conn.prepareStatement(sql);
+					        stmt.setString(1, cpfDigitado);
+
+					        java.sql.ResultSet rs = stmt.executeQuery();
+
+					        if (rs.next()) {
+					            double saldo = rs.getDouble("saldo");
+					            System.out.println("Saldo: R$ " + saldo);
+					        }
+
+					    } catch (Exception e) {
+					        e.printStackTrace();
+					    }
 					}
 					
 					if(escolhaRelatorio == 2) {

@@ -1,6 +1,6 @@
 package pacoteConexao;
 
-import java.sql.Connection;
+import java.sql.Connection; 
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,9 +8,9 @@ import java.sql.SQLException;
 
 public class Conexao {
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/projetoFinal"; 
+    private static final String URL = "jdbc:postgresql://localhost:5432/poo"; 
     private static final String USUARIO = "postgres";
-    private static final String SENHA = "1234";
+    private static final String SENHA = "PirataDosBanc0$4";
 
     public static Connection conectar() {
         try {
