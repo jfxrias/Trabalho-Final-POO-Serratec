@@ -101,19 +101,24 @@ public class Menu implements Controlador{
 						System.out.println("=====SAQUE=====");
 						System.out.println("Digite o valor que você quer sacar:");
 						double valorSaque = leitor.nextDouble();
-						
+						double taxa = 0.10;
+					
 						try (java.sql.Connection conn = Conexao.conectar()) {
 
-						    String sql = "UPDATE contas SET saldo = saldo - ? WHERE cpf_titular = ?";
+				            String sql = "UPDATE contas SET saldo = saldo - ? WHERE cpf_titular = ?";
+				            java.sql.PreparedStatement stmt = conn.prepareStatement(sql);
+				            stmt.setDouble(1, valorSaque + taxa);
+				            stmt.setString(2, cpfDigitado);
+				            stmt.executeUpdate();
 
-						    java.sql.PreparedStatement stmt = conn.prepareStatement(sql);
-						    stmt.setDouble(1, valorSaque);
-						    stmt.setString(2, cpfDigitado);
+				            String log = "INSERT INTO operacoes (cpf_origem, tipo, valor) VALUES (?, 'saque', ?)";
+				            java.sql.PreparedStatement stmtLog = conn.prepareStatement(log);
+				            stmtLog.setString(1, cpfDigitado);
+				            stmtLog.setDouble(2, valorSaque);
+				            stmtLog.executeUpdate();
 
-						    stmt.executeUpdate();
-
-						    System.out.println("Saque realizado!");
-						    continua = 0;
+				            System.out.println("Saque realizado!");
+				            continua = 0;
 
 			} catch (Exception e) {
 		      e.printStackTrace();
@@ -124,29 +129,34 @@ public class Menu implements Controlador{
 				if(SaqDepTransf == 2) {
 					int continua = 1;
 					while(continua == 1) {
-						System.out.println("=====SAQUE=====");
+						System.out.println("=====DEPOSITO=====");
 						System.out.println("Digite o valor que você quer depositar:");
 						double valorDeposito = leitor.nextDouble();
-						
+						double taxa = 0.10;			    
+					     
 						try (java.sql.Connection conn = Conexao.conectar()) {
 
-						    String sql = "UPDATE contas SET saldo = saldo + ? WHERE cpf_titular = ?";
 
-						    java.sql.PreparedStatement stmt = conn.prepareStatement(sql);
-						    stmt.setDouble(1, valorDeposito);
-						    stmt.setString(2, cpfDigitado);
+			            String sql = "UPDATE contas SET saldo = saldo + ? WHERE cpf_titular = ?";
+			            java.sql.PreparedStatement stmt = conn.prepareStatement(sql);
+			            stmt.setDouble(1, valorDeposito - taxa);
+			            stmt.setString(2, cpfDigitado);
+			            stmt.executeUpdate();
 
-						    stmt.executeUpdate();
+			            String log = "INSERT INTO operacoes (cpf_origem, tipo, valor) VALUES (?, 'deposito', ?)";
+			            java.sql.PreparedStatement stmtLog = conn.prepareStatement(log);
+			            stmtLog.setString(1, cpfDigitado);
+			            stmtLog.setDouble(2, valorDeposito);
+			            stmtLog.executeUpdate();
 
-						    System.out.println("Depósito realizado!");
-						    continua = 0;
+			            System.out.println("Depósito realizado!");
+			            continua = 0;
 
 						} catch (Exception e) {
 						    e.printStackTrace();
-						}
-						
-					}
-				}
+		}					
+	}
+}
 				
 				if(SaqDepTransf == 3) {
 					int continua = 1;
@@ -156,31 +166,42 @@ public class Menu implements Controlador{
 						System.out.println("Digite o CPF da conta que você deseja transferir:");
 						leitor.nextLine(); // Limpa o enter que fica no teclado
 						String cpfRecebe = leitor.nextLine();
-						System.out.println("Qual valor você quer depositar?");
+						System.out.println("Qual valor você quer transferir?");
 						double valorTransferencia = leitor.nextDouble();
 						
+						double taxa = 0.20;
+					   		
 						try (java.sql.Connection conn = Conexao.conectar()) {
 
 						    conn.setAutoCommit(false);
 
-						    String sql1 = "UPDATE contas SET saldo = saldo - ? WHERE cpf_titular = ?";
-						    String sql2 = "UPDATE contas SET saldo = saldo + ? WHERE cpf_titular = ?";
+					    String sql1 = "UPDATE contas SET saldo = saldo - ? WHERE cpf_titular = ?";
+			            java.sql.PreparedStatement stmt1 = conn.prepareStatement(sql1);
+			            stmt1.setDouble(1, valorTransferencia + taxa);
+			            stmt1.setString(2, cpfDigitado);
 
-						    java.sql.PreparedStatement stmt1 = conn.prepareStatement(sql1);
-						    java.sql.PreparedStatement stmt2 = conn.prepareStatement(sql2);
+				            // quem recebe só valor
+			            String sql2 = "UPDATE contas SET saldo = saldo + ? WHERE cpf_titular = ?";
+			            java.sql.PreparedStatement stmt2 = conn.prepareStatement(sql2);
+			            stmt2.setDouble(1, valorTransferencia);
+			            stmt2.setString(2, cpfRecebe);
 
-						    stmt1.setDouble(1, valorTransferencia);
-						    stmt1.setString(2, cpfDigitado);
+			            stmt1.executeUpdate();
+			            stmt2.executeUpdate();
 
-						    stmt2.setDouble(1, valorTransferencia);
-						    stmt2.setString(2, cpfRecebe);
+				            // LOG SEM TAXA (só valor real)
+			            String log = "INSERT INTO operacoes (cpf_origem, cpf_destino, tipo, valor) VALUES (?, ?, ?, ?)";
+			            java.sql.PreparedStatement stmtLog = conn.prepareStatement(log);
+			            stmtLog.setString(1, cpfDigitado);
+			            stmtLog.setString(2, cpfRecebe);
+			            stmtLog.setObject(3, "transferencia", java.sql.Types.OTHER);
+			            stmtLog.setDouble(4, valorTransferencia);
+			            
+			            stmtLog.executeUpdate();
+				     
+					    conn.commit();
 
-						    stmt1.executeUpdate();
-						    stmt2.executeUpdate();
-
-						    conn.commit();
-
-						    System.out.println("Transferência realizada!");
+					    System.out.println("Transferência realizada!");
 						    continua = 0;
 
 				    } catch (Exception e) {
