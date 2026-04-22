@@ -17,16 +17,17 @@ public class Menu implements Controlador{
 	
 	while(continuaPedindoSenha == 1) {
 		
-		System.out.println("Olá, bem-vindo ao Banco");
-		System.out.println("Digite seu CPF:");
+		System.out.println("|================OLÁ, BEM-VINDO AO BANCO!===============|");
+		System.out.println("|                                                       |");
+		System.out.println("|Digite seu CPF:                                        |");
 		cpfDigitado = leitor.nextLine();
-		System.out.println("Agora digite sua senha:");
+		System.out.println("|Agora digite sua senha:                                |");
 		senhaDigitada = leitor.nextLine();
 		
 		
 		try (java.sql.Connection conn = pacoteConexao.Conexao.conectar()) {
 			if(conn == null){
-			System.out.println("Erro de conexão com o banco!");
+			System.out.println("|Erro de conexão com o banco!                           |");
 			return;
 }
 		    String sql = "SELECT * FROM clientes WHERE cpf = ? AND senha = ?";
@@ -38,7 +39,8 @@ public class Menu implements Controlador{
 		    java.sql.ResultSet rs = stmt.executeQuery();
 
 		    if(rs.next()) {
-		    	System.out.println("Login efetuado!");
+		    	System.out.println("|===================LOGIN EFETUADO!=====================|");
+		    	System.out.println("|                                                       |");
 		        continuaPedindoSenha = 0;
 		    } else {
 		        String sqlFunc = "SELECT * FROM funcionarios WHERE cpf = ? AND senha = ?";
@@ -97,7 +99,7 @@ public class Menu implements Controlador{
 			int continuaPerguntandoTipoConta = 1;
 			int perguntaTipoConta = 1;
 			while(continuaPerguntandoTipoConta == 1) {
-				System.out.println("Você quer acessar: 1)Conta corrente | 2)Conta Poupança");
+		System.out.println("|Você quer acessar: 1)Conta corrente | 2)Conta Poupança |");
 				perguntaTipoConta = leitor.nextInt();
 			
 				if(perguntaTipoConta == 1 || perguntaTipoConta == 2) {
@@ -110,8 +112,9 @@ public class Menu implements Controlador{
 			int movimentacoesOuRelatorios = 1;
 			
 			while(continuaMovOuRel == 1) {
-				System.out.println("=======BEM VINDO USUARIO=======");
-				System.out.println("1) Movimentações | 2) Relatórios");
+		System.out.println("|===================BEM VINDO USUARIO===================|");
+		System.out.println("|                                                       |");
+		System.out.println("|1) Movimentações | 2) Relatórios                       |");
 				movimentacoesOuRelatorios = leitor.nextInt();
 				
 				if(movimentacoesOuRelatorios == 1 || movimentacoesOuRelatorios ==2) {
@@ -126,8 +129,9 @@ public class Menu implements Controlador{
 				int SaqDepTransf = 1;
 				
 				while(perguntaSaqDepTransf == 1) {
-				System.out.println("=======MOVIMENTAÇÕES NA CONTA=======");
-				System.out.println("1) Saque | 2) Depósito | 3) Transferência");
+		System.out.println("|==================MOVIMENTAÇÕES NA CONTA===============|");
+		System.out.println("|                                                       |");
+		System.out.println("|1) Saque | 2) Depósito | 3) Transferência              |");
 				SaqDepTransf = leitor.nextInt();
 				
 				if(SaqDepTransf == 1 || SaqDepTransf == 2 || SaqDepTransf == 3) {
@@ -137,8 +141,8 @@ public class Menu implements Controlador{
 				if(SaqDepTransf == 1) {
 					int continua = 1;
 					while(continua == 1) {
-						System.out.println("=====SAQUE=====");
-						System.out.println("Digite o valor que você quer sacar:");
+		System.out.println("|=========================SAQUE=========================|");
+		System.out.println("|Digite o valor que você quer sacar:                    |");
 						double valorSaque = leitor.nextDouble();
 						double taxa = 0.10;
 					
@@ -174,7 +178,8 @@ public class Menu implements Controlador{
 				if(SaqDepTransf == 2) {
 					int continua = 1;
 					while(continua == 1) {
-						System.out.println("=====DEPOSITO=====");
+						System.out.println("|=========================DEPOSITO======================|");
+						System.out.println("|                                                       |");
 						System.out.println("Digite o valor que você quer depositar:");
 						double valorDeposito = leitor.nextDouble();
 						double taxa = 0.10;			    
@@ -194,7 +199,7 @@ public class Menu implements Controlador{
 			            stmtLog.setDouble(2, valorDeposito);
 			            stmtLog.executeUpdate();
 
-			            System.out.println("Depósito realizado!");
+			            System.out.println("|Depósito realizado!                                   |");
 			            try (java.io.FileWriter fw = new java.io.FileWriter("operacoes.txt", true);
 			            	     java.io.BufferedWriter bw = new java.io.BufferedWriter(fw)) {
 			            	    bw.write("Deposito | CPF: " + cpfDigitado + " | Valor: R$ " + valorDeposito + "\n");
@@ -213,7 +218,8 @@ public class Menu implements Controlador{
 					int continua = 1;
 					
 					while(continua == 1) {
-						System.out.println("=====TRANSFERÊNCIA=====");
+						System.out.println("|======================TRANSFERÊNCIA====================|");
+						System.out.println("|                                                       |");
 						System.out.println("Digite o CPF da conta que você deseja transferir:");
 						leitor.nextLine(); // Limpa o enter que fica no teclado
 						String cpfRecebe = leitor.nextLine();
@@ -270,7 +276,8 @@ public class Menu implements Controlador{
 }
 			
 		if(movimentacoesOuRelatorios == 2) {
-			System.out.println("=======RELATÓRIOS=======");
+			System.out.println("|========================RELATÓRIOS=====================|");
+			System.out.println("|                                                       |");
 			System.out.println("1) Saldo | 2) Tributações | 3) Rendimento | 4) Seguro de Vida");
 			int escolhaRelatorio = leitor.nextInt();
 			
@@ -359,7 +366,8 @@ public class Menu implements Controlador{
 				
 				while(continua == 1) {
 					if(perguntaTipoConta == 2) { 
-			            System.out.println("=== SIMULAÇÃO DE RENDIMENTO POUPANÇA ===");
+			            System.out.println("|============SIMULAÇÃO DE RENDIMENTO POUPANÇA===========|");
+			            System.out.println("|                                                       |");
 			            System.out.print("Digite o valor que deseja simular: ");
 			            double valorSimular = leitor.nextDouble();
 			            
@@ -393,7 +401,8 @@ public class Menu implements Controlador{
 			}
 			
 			if(escolhaRelatorio == 4) {
-			    System.out.println("=======SEGURO DE VIDA=======");
+			    System.out.println("|=====================SEGURO DE VIDA====================|");
+			    System.out.println("|                                                       |");
 			    System.out.print("De quanto você quer contratar o seguro de vida? R$ ");
 			    double valorSeguro = leitor.nextDouble();
 			    double tributo = valorSeguro * 0.20;
@@ -450,7 +459,8 @@ public class Menu implements Controlador{
 					int continuaPerguntandoTipoConta2 = 1;
 					int perguntaTipoConta2 = 1;
 					while(continuaPerguntandoTipoConta2 == 1) {
-						System.out.println("Você quer acessar: 1)Conta corrente | 2)Conta Poupança");
+						System.out.println("|Você quer acessar: 1)Conta corrente | 2)Conta Poupança |");
+						System.out.println("|                                                       |");
 						perguntaTipoConta2 = leitor.nextInt();
 					
 						if(perguntaTipoConta2 == 1 || perguntaTipoConta2 == 2) {
@@ -463,8 +473,9 @@ public class Menu implements Controlador{
 					int movimentacoesOuRelatorios2 = 1;
 					
 					while(continuaMovOuRel2 == 1) {
-						System.out.println("=======BEM VINDO USUARIO=======");
-						System.out.println("1) Movimentações | 2) Relatórios");
+						System.out.println("|===================BEM VINDO USUARIO===================|");
+						System.out.println("|                                                       |");
+						System.out.println("|1) Movimentações | 2) Relatórios                       |");
 						movimentacoesOuRelatorios2 = leitor.nextInt();
 						
 						if(movimentacoesOuRelatorios2 == 1 || movimentacoesOuRelatorios2 ==2) {
@@ -479,8 +490,9 @@ public class Menu implements Controlador{
 						int SaqDepTransf = 1;
 						
 						while(perguntaSaqDepTransf == 1) {
-						System.out.println("=======MOVIMENTAÇÕES NA CONTA=======");
-						System.out.println("1) Saque | 2) Depósito | 3) Transferência");
+						System.out.println("|=================MOVIMENTAÇÕES NA CONTA================|");
+						System.out.println("|                                                       |");
+						System.out.println("|1) Saque | 2) Depósito | 3) Transferência              |");
 						SaqDepTransf = leitor.nextInt();
 						
 						if(SaqDepTransf == 1 || SaqDepTransf == 2 || SaqDepTransf == 3) {
@@ -488,8 +500,9 @@ public class Menu implements Controlador{
 						}
 						
 						if(SaqDepTransf == 1) {
-						    System.out.println("=====SAQUE=====");
-						    System.out.println("Digite o valor que você quer sacar:");
+						    System.out.println("|========================SAQUE==========================|");
+						    System.out.println("|                                                       |");
+						    System.out.println("|Digite o valor que você quer sacar:                    |");
 						    double valorSaque = leitor.nextDouble();
 						    double taxa = 0.10;
 
@@ -533,8 +546,9 @@ public class Menu implements Controlador{
 						}
 						
 						if(SaqDepTransf == 2) {
-						    System.out.println("=====DEPÓSITO=====");
-						    System.out.println("Digite o valor que você quer depositar:");
+						    System.out.println("|=======================DEPÓSITO========================|");
+						    System.out.println("|                                                       |");
+						    System.out.println("|Digite o valor que você quer depositar:                |");
 						    double valorDeposito = leitor.nextDouble();
 						    double taxa = 0.10;
 
@@ -567,8 +581,9 @@ public class Menu implements Controlador{
 						
 					}	
 						if(SaqDepTransf == 3) {
-						    System.out.println("=====TRANSFERÊNCIA=====");
-						    System.out.println("Digite o CPF da conta que você deseja transferir:");
+						    System.out.println("|====================TRANSFERÊNCIA======================|");
+						    System.out.println("|                                                       |");
+						    System.out.println("|Digite o CPF da conta que você deseja transferir:      |");
 						    leitor.nextLine();
 						    String cpfRecebe = leitor.nextLine();
 						    System.out.println("Qual valor você quer transferir?");
@@ -628,7 +643,8 @@ public class Menu implements Controlador{
 				
 					
 				if(movimentacoesOuRelatorios2 == 2) {
-					System.out.println("=======RELATÓRIOS=======");
+					System.out.println("|=======================RELATÓRIOS======================|");
+					System.out.println("|                                                       |");
 					System.out.println("1) Saldo | 2) Tributações | 3) Rendimento | 4) Contas Agência");
 					if(tipoDeUsuario == 3) {
 						System.out.println("Opções adicionais para Diretor:");
@@ -726,11 +742,12 @@ public class Menu implements Controlador{
 						
 						while(continua == 1) {
 							if(perguntaTipoConta2 == 2) { 
-					            System.out.println("=== SIMULAÇÃO DE RENDIMENTO POUPANÇA ===");
-					            System.out.print("Digite o valor que deseja simular: ");
+					            System.out.println("|=========== SIMULAÇÃO DE RENDIMENTO POUPANÇA ==========|");
+					            System.out.println("|                                                       |");
+					            System.out.print("|Digite o valor que deseja simular: 					  |");
 					            double valorSimular = leitor.nextDouble();
 					            
-					            System.out.print("Digite a quantidade de dias para o prazo: ");
+					            System.out.print("|Digite a quantidade de dias para o prazo: 			  |");
 					            int dias = leitor.nextInt();
 
 					            //Calculamos o rendimento (Taxa de 0.5% ao mês)
@@ -769,7 +786,8 @@ public class Menu implements Controlador{
 					        java.sql.ResultSet rs = stmt.executeQuery();
 
 					        if (rs.next()) {
-					            System.out.println("=======CONTAS AGÊNCIAS=======");
+					            System.out.println("|=====================CONTAS AGÊNCIAS===================|");
+					            System.out.println("|                                                       |");
 					            System.out.println("Total de contas na sua agência: " + rs.getInt("total"));
 					        }
 

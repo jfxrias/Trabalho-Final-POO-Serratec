@@ -1,1 +1,13 @@
+/.classpath
+/.project
+/.settings/
+/cliente/
+/funcionario/
+/main/
 /menu/
+/operacoes.txt
+/pacoteConexao/
+/relatorio_capital.txt
+/relatorio_clientes.txt
+/relatorio_saldo.txt
+/relatorio_tributacao.txt
