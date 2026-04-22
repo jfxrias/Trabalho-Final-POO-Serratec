@@ -1,7 +1,7 @@
 package cliente;
 
 public class ContaCorrente extends Conta {
-
+	private String tipo = "corrente";
     private double taxaTotal;
 
     public ContaCorrente(String cpfTitular, double saldo, int agencia) {

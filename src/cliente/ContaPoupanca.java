@@ -1,7 +1,9 @@
 package cliente;
 
 public class ContaPoupanca extends Conta {
-
+	private String tipo = "poupanca";
+	
+	
     public ContaPoupanca(String cpfTitular, double saldo, int agencia) {
         super(cpfTitular, saldo, agencia);
     }

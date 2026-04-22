@@ -100,5 +100,3 @@ select * from funcionarios;
 
 
 
-
-

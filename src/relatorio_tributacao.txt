@@ -1,0 +1,4 @@
+Relatorio de Tributacao
+CPF: 11111111111
+Total de taxas bancarias: R$ 0.5
+Saque: R$0,10 | Deposito: R$0,10 | Transferencia: R$0,20
